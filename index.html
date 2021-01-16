@@ -1,41 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>React Sports Game</title>
-</head>
-<body>
+    <link rel="stylesheet" href="../audio/Assets/stylesheet.css" />
+  </head>
+
+  <body>
     <!-- include an element for ReactDOM to attach our React-generated elements to -->
     <div id="root"></div>
 
     <!-- include React and ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
     <!-- include Babel standalone so we can process JSX in React.createElement stuff -->
-    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/babel-standalone@6/babel.min.js"
+    ></script>
 
     <!-- include our JS+JSX for the React Appliccation -->
-<script type="text/babel">
+    <script type="text/babel">
+      // class Game extends React.component {
+      //   constructor(props) {
+      //     super(props);
+      //   }
+      //   render() {
+      //     return <strong>{this.props.venue}</strong>;
+      //   }
+      // }
 
-// An App component under which all other components will be added
-function App (props) {
-  return (
-    <div>
-      <h1>Welcome to the Sports Game starter!</h1>
-      <em>This file represents the way your code should look after completing the <strong>Setup</strong> steps in the instructions.</em>
-    </div>
-  )
-}
+      // function Team(props) {
+      //   let shotDiv;
+      //   if (this.props.shots) {
+      //     const shootingPercent = Math.round(
+      //       (this.props.score / this.props.shots) * 100
+      //     );
 
+      //     shotDiv = (
+      //       <div>
+      //         <h3>Shooting%:{shootingPercent}</h3>
+      //       </div>
+      //     );
+      //   }
+      //   return (
+      //     <div>
+      //       <h1>{this.props.name}</h1>
+      //       <img
+      //         style={{ width: 250, hieght: 250 }}
+      //         src={this.props.logo}
+      //         alt={this.props.logo}
+      //       />
+      //       <button onClick={this.shootShot}>Shoot</button>
+      //       <h3>Shots Taken:{this.props.shots}</h3>
+      //       <h3>Score:{this.props.score}</h3>
+      //       {shotDiv}
+      //     </div>
+      //   );
+      // }
+      //   constructor(props) {
+      //     super(props);
+      //   }
+      //   render() {
+      //     return <strong>{this.props.venue}</strong>;
+      //   }
+      // }
 
+      class Team extends React.Component {
+        constructor(props) {
+          super(props);
 
-// Render the App
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-)
-</script>
-</body>
+          this.state = {
+            shots: 0,
+            score: 0,
+            shotPerc: 0,
+          };
+          this.shotSound = new Audio("/audio/Swish+2.mp3");
+          this.scoreSound = new Audio("/audio/cheers.mp3");
+        }
+        shootShot = (event) => {
+          this.shotSound.play();
+          if (Math.floor(Math.random() * 2 > 1)) {
+            this.scoreSound.play();
+            this.setState((state, prop) => ({
+              score: state.score + 1,
+            }));
+          }
+          this.setState((state, prop) => ({
+            shots: state.shots + 1,
+          }));
+        };
+
+        render() {
+          let shotDiv;
+          if (this.state.shots) {
+            const shootingPercent = Math.round(
+              (this.state.score / this.state.shots) * 100
+            );
+
+            shotDiv = (
+              <div>
+                <h3>Shooting%:{shootingPercent}</h3>
+              </div>
+            );
+          }
+          return (
+            <div className="clubs">
+              <h1>{this.props.name}</h1>
+              <img
+                style={{ width: 250, hieght: 250 }}
+                src={this.props.logo}
+                alt={this.props.logo}
+              />
+              <button onClick={this.shootShot}>Shoot</button>
+              <h3>Shots Taken:{this.state.shots}</h3>
+              <h3>Score:{this.state.score}</h3>
+              {shotDiv}
+            </div>
+          );
+        }
+      }
+
+      // class Game extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+
+      //     this.state = {
+      //       shots: 0,
+      //       score: 0,
+      //       shotPerc: 0,
+      //     };
+      //     this.shotSound = new Audio("/audio/Swish+2.mp3");
+      //     this.scoreSound = new Audio("/audio/cheers.mp3");
+      //   }
+      //   shootShot = (event) => {
+      //     this.shotSound.play();
+      //     if (Math.floor(Math.random() * 2 > 1)) {
+      //       this.scoreSound.play();
+      //       this.setState((state, prop) => ({
+      //         score: state.score + 1,
+      //       }));
+      //     }
+      //     this.setState((state, prop) => ({
+      //       shots: state.shots + 1,
+      //     }));
+      //   };
+      //   render() {}
+      // }
+
+      function Game(props) {
+        return (
+          <div className="game">
+            <h1>Welcome to the {props.venue}</h1>
+            <div className="opponents">
+              <Team
+                name="Toronto Raptors"
+                logo="/7045aacd8e46735de6e3f1a89c693c6c.png"
+              />
+
+              <div className="vs">VS</div>
+
+              <Team name="Philadelphia 76ers" logo="/rs-196506-wJ1TgEf.png" />
+            </div>
+          </div>
+        );
+      }
+      // An App component under which all other components will be added
+      function App(props) {
+        return (
+          <div className="app">
+            <Game venue="Wells Fargo Center" />
+          </div>
+        );
+      }
+
+      // Render the App
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
 </html>
